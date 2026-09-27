@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#08110f" />
+    <title>Beacon Emergency Circle</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Beacon home">
+        <span class="brand-mark" aria-hidden="true">
+          <span class="brand-pulse"></span>
+        </span>
+        <span>
+          <strong>BEACON</strong>
+          <small>Emergency Circle</small>
+        </span>
+      </a>
+      <div class="topbar-status">
+        <span class="live-dot"></span>
+        <span id="systemMode">Checking system</span>
+      </div>
+    </header>
+
+    <main class="shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Think globally. Protect locally.</p>
+          <h1>When an alert says evacuate, <span>Beacon tells you what happens next.</span></h1>
+          <p class="hero-copy">
+            A voice-first emergency guidance layer that alerts residents, reaches their trusted
+            contacts, and sends a safe destination directly to both phones.
+          </p>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="map-grid"></div>
+          <div class="incident-ring ring-three"></div>
+          <div class="incident-ring ring-two"></div>
+          <div class="incident-ring ring-one"></div>
+          <div class="fire-pin">🔥</div>
+          <div class="safe-pin"><span>✓</span><small>SAFE</small></div>
+          <div class="route-line"></div>
+        </div>
+      </section>
+
+      <div id="notice" class="notice hidden" role="status"></div>
+
+      <section class="workspace">
+        <form id="scenarioForm" class="panel form-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="step-label">01 · DEMO INPUT</p>
+              <h2>Create the emergency circle</h2>
+            </div>
+            <button id="resetButton" class="ghost-button" type="button">Reset</button>
+          </div>
+
+          <div class="person-card resident-card">
+            <div class="person-card-heading">
+              <span class="person-icon">A</span>
+              <div>
+                <h3>At-risk resident</h3>
+                <p>Receives personalized emergency guidance</p>
+              </div>
+            </div>
+            <div class="field-grid">
+              <label>
+                <span>Name</span>
+                <input id="residentName" name="residentName" autocomplete="off" value="Alex" required />
+              </label>
+              <label>
+                <span>Verified phone</span>
+                <input
+                  id="residentPhone"
+                  name="residentPhone"
+                  inputmode="tel"
+                  placeholder="+1 310 555 0123"
+                  autocomplete="tel"
+                  required
+                />
+              </label>
+            </div>
+            <div class="option-row">
+              <label class="check-chip">
+                <input id="hasPets" type="checkbox" checked />
+                <span>🐾 Has pets</span>
+              </label>
+              <label class="check-chip">
+                <input id="needsTransportation" type="checkbox" />
+                <span>🚙 Needs transportation</span>
+              </label>
+              <label class="select-chip">
+                <span>Language</span>
+                <select id="preferredLanguage">
+                  <option>English</option>
+                  <option>Spanish</option>
+                  <option>Portuguese</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="relationship-line">
+            <span></span><b>TRUSTED CONNECTION</b><span></span>
+          </div>
+
+          <div class="person-card trusted-card">
+            <div class="person-card-heading">
+              <span class="person-icon">B</span>
+              <div>
+                <h3>Trusted contact</h3>
+                <p>Gets alerted when the resident may need help</p>
+              </div>
+            </div>
+            <div class="field-grid">
+              <label>
+                <span>Name</span>
+                <input id="trustedName" name="trustedName" autocomplete="off" value="Jamie" required />
+              </label>
+              <label>
+                <span>Verified phone</span>
+                <input
+                  id="trustedPhone"
+                  name="trustedPhone"
+                  inputmode="tel"
+                  placeholder="+1 310 555 0456"
+                  autocomplete="tel"
+                  required
+                />
+              </label>
+            </div>
+          </div>
+
+          <div class="incident-card">
+            <div>
+              <p class="incident-kicker">SIMULATED INCIDENT</p>
+              <h3><span>🔥</span> Wildfire evacuation order</h3>
+              <p>North Glendale foothills · 4-mile demonstration radius</p>
+            </div>
+            <span class="order-badge">EVACUATION ORDER</span>
+          </div>
+
+          <label class="consent-row">
+            <input id="consentConfirmed" type="checkbox" required />
+            <span>
+              Both phone owners consent to receive hackathon test calls and texts. Only use
+              Twilio-verified numbers while the account is in trial mode.
+            </span>
+          </label>
+
+          <button id="runDemoButton" class="primary-button" type="submit">
+            <span class="button-icon">⚡</span>
+            <span>
+              <b>DECLARE WILDFIRE</b>
+              <small>Launch the resident and trusted-contact flow</small>
+            </span>
+          </button>
+        </form>
+
+        <section class="panel response-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="step-label">02 · LIVE RESPONSE</p>
+              <h2>Emergency orchestration</h2>
+            </div>
+            <span id="scenarioBadge" class="scenario-badge">STANDBY</span>
+          </div>
+
+          <div id="destinationCard" class="destination-card muted-card">
+            <div class="destination-icon">⌖</div>
+            <div>
+              <span>DEMO MEETING POINT</span>
+              <h3 id="destinationName">Waiting for incident</h3>
+              <p id="destinationAddress">Beacon will select a destination outside the demo zone.</p>
+              <a id="destinationLink" class="hidden" target="_blank" rel="noreferrer">Open directions ↗</a>
+            </div>
+            <span id="destinationSource" class="source-badge">PENDING</span>
+          </div>
+
+          <ol class="timeline" id="timeline">
+            <li data-status="scenario" class="timeline-item idle">
+              <span class="timeline-marker">1</span>
+              <div><b>Incident created</b><small>Simulate the official emergency event</small></div>
+              <span class="timeline-state">Waiting</span>
+            </li>
+            <li data-status="gis" class="timeline-item idle">
+              <span class="timeline-marker">2</span>
+              <div><b>Safe destination selected</b><small>GIS result with reliable fallback</small></div>
+              <span class="timeline-state">Waiting</span>
+            </li>
+            <li data-status="residentCall" class="timeline-item idle">
+              <span class="timeline-marker">3</span>
+              <div><b>Resident voice call</b><small>ElevenLabs agent through Twilio</small></div>
+              <span class="timeline-state">Waiting</span>
+            </li>
+            <li data-status="residentSms" class="timeline-item idle">
+              <span class="timeline-marker">4</span>
+              <div><b>Resident directions sent</b><small>Clickable Google Maps route by SMS</small></div>
+              <span class="timeline-state">Waiting</span>
+            </li>
+            <li data-status="trustedCall" class="timeline-item idle">
+              <span class="timeline-marker">5</span>
+              <div><b>Trusted contact alerted</b><small>Emergency Circle notification call</small></div>
+              <span class="timeline-state">Waiting</span>
+            </li>
+            <li data-status="trustedSms" class="timeline-item idle">
+              <span class="timeline-marker">6</span>
+              <div><b>Shared destination delivered</b><small>Both people coordinate around one place</small></div>
+              <span class="timeline-state">Waiting</span>
+            </li>
+          </ol>
+
+          <div class="manual-controls">
+            <div class="manual-heading">
+              <div>
+                <span>DEMO SAFETY CONTROLS</span>
+                <h3>Retry any step manually</h3>
+              </div>
+              <small id="scenarioIdLabel">No scenario created</small>
+            </div>
+            <div class="manual-grid">
+              <button type="button" data-action="call-resident" disabled>Call resident</button>
+              <button type="button" data-action="sms-resident" disabled>Text resident</button>
+              <button type="button" data-action="call-trusted" disabled>Call trusted contact</button>
+              <button type="button" data-action="sms-trusted" disabled>Text trusted contact</button>
+            </div>
+          </div>
+
+          <div class="disclaimer">
+            <b>Demo safeguard:</b> Beacon never declares an emergency. This prototype communicates
+            a simulated incident and labels every call and text as a hackathon demonstration.
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer>
+      <span>BEACON · JEWEL CITY HACKS</span>
+      <span>Voice by ElevenLabs · Telephony by Twilio · Glendale GIS ready</span>
+    </footer>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

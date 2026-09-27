@@ -1,0 +1,18 @@
+{
+  "name": "beacon-emergency-circle",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Hackathon MVP for voice-first emergency guidance and trusted-contact alerts.",
+  "scripts": {
+    "start": "node src/server.mjs",
+    "dev": "node --watch src/server.mjs",
+    "test": "node --test test/*.test.mjs",
+    "discover:elevenlabs": "node scripts/discover-elevenlabs.mjs",
+    "test:sms": "node scripts/test-sms.mjs",
+    "test:call": "node scripts/test-call.mjs"
+  },
+  "engines": {
+    "node": ">=20.11"
+  }
+}
